@@ -4,11 +4,7 @@ const contacts = () => {};
 
 contacts.getAll = async (_, response) => {
   try {
-    const apiResponse = await hubspotClient.crm.contacts.getAll(
-      undefined,
-      undefined,
-      ["site", "site_name", "site_id", "address"]
-    );
+    const apiResponse = await hubspotClient.crm.contacts.getAll();
     response(null, apiResponse);
   } catch (e) {
     response(e);
@@ -19,7 +15,7 @@ contacts.getById = async (req, response) => {
   try {
     const apiResponse = await hubspotClient.crm.contacts.basicApi.getById(
       req.params.id,
-      ["site", "site_name", "site_id", "address"]
+      ["site", "site_name", "site_id", "plan_info"]
     );
     response(null, apiResponse);
   } catch (e) {
@@ -72,6 +68,7 @@ contacts.delete = async (req, response) => {
     const apiResponse = await hubspotClient.crm.contacts.basicApi.archive(
       req.params.id
     );
+    console.log('apiResponse: ', apiResponse);
     response(null, apiResponse);
   } catch (e) {
     response(e);
