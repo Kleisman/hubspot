@@ -1,7 +1,7 @@
-const contacts = require("../models/contacts.model");
+const model = require("../models/sites");
 
 exports.getAll = (req, res) => {
-  contacts.getAll(req, (err, data) => {
+  model.getAll(req, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -11,17 +11,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-  contacts.getById(req, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.send(data);
-    }
-  });
-};
-
-exports.webhooks = (req, res) => {
-  contacts.webhooks(req, (err, data) => {
+  model.getById(req, (err, data) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -37,7 +27,7 @@ exports.create = (req, res) => {
     });
     return;
   }
-  contacts.create(req, (responseErr, response) => {
+  model.create(req, (responseErr, response) => {
     if (responseErr) {
       res.status(500).send(responseErr);
     } else {
@@ -62,7 +52,7 @@ exports.update = (req, res) => {
     return;
   }
 
-  contacts.update(req, (responseErr, response) => {
+  model.update(req, (responseErr, response) => {
     if (responseErr) {
       res.status(500).send(responseErr);
     } else {
@@ -80,7 +70,7 @@ exports.delete = (req, res) => {
     return;
   }
 
-  contacts.delete(req, (responseErr, response) => {
+  model.delete(req, (responseErr, response) => {
     if (responseErr) {
       if (responseErr.noFound) {
         res.status(404).send({
