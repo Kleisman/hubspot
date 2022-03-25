@@ -1,10 +1,14 @@
-const hubspotClient = require("./config.js");
+const hubspotClient = require("../config/config.js");
 
 const contacts = () => {};
 
 contacts.getAll = async (_, response) => {
   try {
-    const apiResponse = await hubspotClient.crm.contacts.getAll();
+    const apiResponse = await hubspotClient.crm.contacts.getAll(
+      undefined,
+      undefined,
+      ["site_name", "site_id", "slug", "address", "active", "state"]
+    );
     response(null, apiResponse);
   } catch (e) {
     response(e);
@@ -15,18 +19,7 @@ contacts.getById = async (req, response) => {
   try {
     const apiResponse = await hubspotClient.crm.contacts.basicApi.getById(
       req.params.id,
-      ["site", "site_name", "site_id", "plan_info"]
-    );
-    response(null, apiResponse);
-  } catch (e) {
-    response(e);
-  }
-};
-
-contacts.webhooks = async (req, response) => {
-  try {
-    const apiResponse = await hubspotClient.webhooks.settingsApi.getAll(
-      750414
+      ["site_name", "site_id", "slug", "address", "active", "state"]
     );
     response(null, apiResponse);
   } catch (e) {
@@ -49,8 +42,7 @@ contacts.update = async (req, response) => {
   const properties = {
     ...req.body,
   };
-  const id = req.body.id;
-  delete properties.id;
+  const id = req.params.id;
   const SimplePublicObjectInput = { properties };
   try {
     const apiResponse = await hubspotClient.crm.contacts.basicApi.update(
@@ -68,7 +60,15 @@ contacts.delete = async (req, response) => {
     const apiResponse = await hubspotClient.crm.contacts.basicApi.archive(
       req.params.id
     );
-    console.log('apiResponse: ', apiResponse);
+    response(null, apiResponse);
+  } catch (e) {
+    response(e);
+  }
+};
+
+contacts.webhooks = async (req, response) => {
+  try {
+    const apiResponse = await hubspotClient.webhooks.settingsApi.getAll();
     response(null, apiResponse);
   } catch (e) {
     response(e);

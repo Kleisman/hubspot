@@ -1,13 +1,25 @@
 const app = require("./app");
+const { Router } = require("express");
+const listRoutes = require("./app/routes");
+const router = Router();
 
-const contactRouter = require("./routes/contacts.routes");
+listRoutes.forEach((route) => {
+  app.use(`/${route}`, require(`./app/routes/${route}`));
+});
 
-app.use("/contacts", contactRouter);
+router.get(`*`, (req, res) => {
+  res.status(404);
+  res.send({
+    error: "No found",
+  });
+});
+
+app.use(router);
 
 app.get("/", (req, res) => {
-  res.render("index.ejs", { routes: ["/contacts"] });
+  res.render("index.ejs", { routes: listRoutes });
 });
 
 app.listen(app.get("port"), () => {
-  console.log("listening on port", app.get("port"));
+  console.log("listening on port: ", app.get("port"));
 });
