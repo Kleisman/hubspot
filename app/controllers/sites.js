@@ -36,6 +36,23 @@ exports.create = (req, res) => {
   });
 };
 
+exports.createAssociations = (req, res) => {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    res.status(400).send({
+      message: "Debe enviar los campos.",
+    });
+    return;
+  }
+  model.createAssociations(req, (responseErr, response) => {
+    if (responseErr) {
+      res.status(500).send(responseErr);
+    } else {
+      res.status(200).send(response);
+    }
+  });
+};
+
+
 exports.update = (req, res) => {
   const id = req.params.id;
   if (!id) {
